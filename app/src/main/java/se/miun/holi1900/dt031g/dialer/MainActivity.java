@@ -26,5 +26,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**Called when the Settings button is clicked*/
+    public void displaySettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 
 }
