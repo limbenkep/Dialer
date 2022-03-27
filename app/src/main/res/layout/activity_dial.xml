@@ -7,10 +7,11 @@
     tools:context=".DialActivity">
 
   <TextView
-      android:id="@+id/textView"
+      android:id="@+id/dialTextView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/dial_activity_text"
+      android:textSize="16sp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"

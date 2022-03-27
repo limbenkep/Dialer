@@ -19,4 +19,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DialActivity.class);
         startActivity(intent);
     }
+
+    /**Called when the Call List button is clicked*/
+    public void displayCallList(View view) {
+        Intent intent = new Intent(this, CallListActivity.class);
+        startActivity(intent);
+    }
+
+
 }

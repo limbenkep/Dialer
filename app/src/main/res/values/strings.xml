@@ -7,4 +7,5 @@
     <string name="about_button_text">ABOUT</string>
     <string name="dial_button_text">DIAL</string>
     <string name="dial_activity_text">This is the Dial activity</string>
+    <string name="call_list_activity_text">This is Call list activity</string>
 </resources>
