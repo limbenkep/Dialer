@@ -26,6 +26,7 @@
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginStart="64dp"
+        android:onClick="displayKeyPad"
         android:text="@string/dial_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/callListButton"

@@ -1,0 +1,13 @@
+package se.miun.holi1900.dt031g.dialer;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class DialActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dial);
+    }
+}
