@@ -58,6 +58,7 @@
         android:id="@+id/mapButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
+        android:onClick="displayMap"
         android:text="@string/map_button_text"
         app:layout_constraintBaseline_toBaselineOf="@+id/settingsButton"
         app:layout_constraintEnd_toEndOf="@+id/callListButton"

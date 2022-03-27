@@ -65,6 +65,7 @@
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        android:onClick="displayMap"
         android:text="@string/map_button_text"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/settingsButton"

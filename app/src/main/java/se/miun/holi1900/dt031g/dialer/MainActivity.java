@@ -32,4 +32,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**Called when the Map button is clicked*/
+    public void displayMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
 }
