@@ -25,4 +25,13 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="about_dialog_text">This app is supposed to mimic the keypad on a phone.
+        The app will consist of activities to:\n
+        \n\u2022 Enter number to dial
+        \n\u2022 See previously dialed numbers
+        \n\u2022 Change the keypad settings
+        \n\u2022 Show a map where previous calls are dialed from
+    </string>
+    <string name="ok">OK</string>
+    <string name="about_dialog_title">About</string>
 </resources>

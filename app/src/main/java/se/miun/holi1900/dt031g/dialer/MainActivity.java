@@ -38,4 +38,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**Called when the About button is clicked*/
+    public void openAboutDialog(View view){
+        AboutDialog aboutDialog = new AboutDialog();
+        aboutDialog.show(getSupportFragmentManager(), "about dialog");
+    }
+
 }

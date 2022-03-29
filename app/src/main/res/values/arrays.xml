@@ -9,4 +9,11 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="about_options_array">
+        <item>Enter number to dial</item>
+        <item>See previously dialed numbers</item>
+        <item>Change the keypad settings</item>
+        <item>Show a map where previous calls are dialed from</item>
+    </string-array>
 </resources>
