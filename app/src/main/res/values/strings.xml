@@ -34,4 +34,6 @@
     </string>
     <string name="ok">OK</string>
     <string name="about_dialog_title">About</string>
+    <string name="dial_buttton_title">0</string>
+    <string name="dial_button_message">000</string>
 </resources>
