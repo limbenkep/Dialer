@@ -6,15 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".DialActivity">
 
-  <TextView
-      android:id="@+id/dialTextView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/dial_activity_text"
-      android:textSize="16sp"
+  <se.miun.holi1900.dt031g.dialer.DialButtonView
+      android:id="@+id/dial_button_1"
+      android:layout_width="@dimen/dial_button_dimen_50dp"
+      android:layout_height="@dimen/dial_button_dimen_100dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/dial_button_2"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.536"
+      app:message="@string/abc"
+      app:title="@string/number_1" />
+
+  <se.miun.holi1900.dt031g.dialer.DialButtonView
+      android:id="@+id/dial_button_2"
+      android:layout_width="@dimen/dial_button_dimen_200dp"
+      android:layout_height="@dimen/dial_button_dimen_200dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.502"
+      app:message="@string/def"
+      app:title="@string/number_2" />
+
+  <se.miun.holi1900.dt031g.dialer.DialButtonView
+      android:id="@+id/dial_button_3"
+      android:layout_width="@dimen/dial_button_dimen_100dp"
+      android:layout_height="@dimen/dial_button_dimen_50dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintStart_toEndOf="@+id/dial_button_2"
+      app:layout_constraintTop_toTopOf="parent"
+      app:message="@string/ghi"
+      app:title="@string/number_3" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

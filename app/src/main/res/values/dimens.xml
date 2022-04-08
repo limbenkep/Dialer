@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="corner_radius">16dp</dimen>
+    <dimen name="dial_button_dimen_50dp">50dp</dimen>
+    <dimen name="dial_button_dimen_100dp">100dp</dimen>
+    <dimen name="dial_button_dimen_200dp">200dp</dimen>
+
+    <fraction name="title_box_size">.6</fraction>
+    <fraction name="message_box_size">.2</fraction>
+    <fraction name="dial_button_padding_left_top">.1</fraction>
+    <fraction name="dial_button_padding_right_bottom">.9</fraction>
 </resources>
