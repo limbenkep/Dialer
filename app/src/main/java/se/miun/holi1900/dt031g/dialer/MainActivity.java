@@ -16,26 +16,22 @@ public class MainActivity extends AppCompatActivity {
 
     /**Called when the DIAL button is clicked*/
     public void displayKeyPad(View view) {
-        Intent intent = new Intent(this, DialActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, DialActivity.class));
     }
 
     /**Called when the Call List button is clicked*/
     public void displayCallList(View view) {
-        Intent intent = new Intent(this, CallListActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, CallListActivity.class));
     }
 
     /**Called when the Settings button is clicked*/
     public void displaySettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     /**Called when the Map button is clicked*/
     public void displayMap(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, MapsActivity.class));
     }
 
     /**Called when the About button is clicked*/

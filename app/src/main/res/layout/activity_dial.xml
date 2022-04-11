@@ -40,4 +40,10 @@
       app:layout_constraintTop_toBottomOf="@+id/dial_button_2"
       app:message="@string/ghi"
       app:title="@string/number_3" />
+
+  <se.miun.holi1900.dt031g.dialer.DialButtonView
+      android:id="@+id/expanded_dial_button"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="invisible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
