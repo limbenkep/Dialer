@@ -12,5 +12,6 @@
     <fraction name="upper_mid_guideline_dimen">.275</fraction>
     <fraction name="center_guideline_dimen">.5</fraction>
     <fraction name="lower_mid_guideline_dimen">.725</fraction>
-    <fraction name="dial_pad_button_size">.3</fraction>
+    <fraction name="dial_pad_button_width">.25</fraction>
+    <fraction name="dial_pad_button_height">.2</fraction>
 </resources>

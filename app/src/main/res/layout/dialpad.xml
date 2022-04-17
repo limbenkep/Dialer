@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -61,7 +60,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_upper_mid_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_top_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:title="@string/number_1" />
 
     <se.miun.holi1900.dt031g.dialer.DialButtonView
@@ -72,7 +72,8 @@
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_top_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/abc_cap"
         app:title="@string/number_2" />
 
@@ -83,7 +84,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_upper_mid_guideline"
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_top_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/def_cap"
         app:title="@string/number_3" />
 
@@ -94,7 +96,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_center_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_upper_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/ghi_cap"
         app:title="@string/number_4" />
 
@@ -106,7 +109,8 @@
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_upper_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/jkl_cap"
         app:title="@string/number_5" />
 
@@ -117,7 +121,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_center_guideline"
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_upper_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/mno_cap"
         app:title="@string/number_6" />
 
@@ -128,7 +133,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_lower_mid_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_center_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/pqrs_cap"
         app:title="@string/number_7" />
 
@@ -140,7 +146,8 @@
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_center_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/tuv_cap"
         app:title="@string/number_8" />
 
@@ -151,7 +158,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_lower_mid_guideline"
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_center_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/wxyz_cap"
         app:title="@string/number_9" />
 
@@ -162,7 +170,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_buttom_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_lower_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:title="@string/star_symbol" />
 
     <se.miun.holi1900.dt031g.dialer.DialButtonView
@@ -173,7 +182,8 @@
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintStart_toStartOf="@+id/dialpad_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_lower_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:message="@string/plus_sign"
         app:title="@string/number_0" />
 
@@ -184,7 +194,8 @@
         app:layout_constraintBottom_toTopOf="@+id/dialpad_buttom_guideline"
         app:layout_constraintEnd_toEndOf="@id/dialpad_right_guideline"
         app:layout_constraintTop_toTopOf="@+id/dialpad_lower_mid_guideline"
-        app:layout_constraintWidth_percent="@fraction/dial_pad_button_size"
+        app:layout_constraintWidth_percent="@fraction/dial_pad_button_width"
+        app:layout_constraintHeight_percent="@fraction/dial_pad_button_height"
         app:title="@string/hashtag_symbol" />
 
 
