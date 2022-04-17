@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     //Tag for logging
     private static final String TAG= "assignment4";
     private boolean aboutPageOpened;
-    private Button about;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //get the reference to the about button that opens about activity on click
-        about = findViewById(R.id.aboutButton);
+        Button about = findViewById(R.id.aboutButton);
 
         // Check whether we're recreating a previously destroyed instance
         if (savedInstanceState != null) {
@@ -48,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: about page has been opened in thisi life cycle=" + aboutPageOpened);
+
+        //save the value of aboutPageOpened
         outState.putBoolean(ABOUT_PAGE_STATE, aboutPageOpened);
+
+        // The superclass saves the view hierarchy state
         super.onSaveInstanceState(outState);
     }
 
@@ -62,13 +66,17 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+
         //the superclass restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
         //Restore value of for aboutPageState that tracks state of About activity
         aboutPageOpened= savedInstanceState.getBoolean(ABOUT_PAGE_STATE);
     }
 
-    /**Called when the DIAL button is clicked*/
+    /**
+     * Called when the DIAL button is clicked. Displays dialpad
+     * @param view
+     */
     public void displayKeyPad(View view) {
         startActivity(new Intent(this, DialActivity.class));
     }
@@ -88,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, MapsActivity.class));
     }
 
-    /**Called when the About button is clicked*/
+    /**
+     * Called when the about button is clicked. Displays a dialog box with information on the
+     * features of this application
+     * @param view
+     */
     public void openAboutDialog(View view){
         if(!aboutPageOpened){
             aboutPageOpened = true;
