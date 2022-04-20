@@ -21,7 +21,7 @@ public class SoundPlayer {
     // reference to single_instance of type SoundPlayer
     private static SoundPlayer single_instance = null;
 
-    public SoundPool soundPool;
+    private SoundPool soundPool;
 
     private SoundPlayer(Context context){
         /*
@@ -83,11 +83,12 @@ public class SoundPlayer {
     }
 
     /**
-     * release resources and destroys the soundPool object
+     * release resources and sets the soundPool object and current instance of this class to null
      */
     public void destroy(){
         Log.d("assignment4", "SoundPlayer.onDestroy: releasing sound pool");
         soundPool.release();
         soundPool = null;
+        single_instance = null;
     }
 }

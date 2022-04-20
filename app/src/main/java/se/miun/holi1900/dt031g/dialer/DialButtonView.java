@@ -18,8 +18,6 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
     private TextView titleView;
     private TextView messageView;
 
-    //A SoundPlayer  to play the sounds
-    SoundPlayer soundPlayer;
 
     /**
      * Constructor to use when creating a DialButtonView from code.
@@ -50,11 +48,6 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
      * @param attributeSet The attributes of the XML tag that is inflating the view. This value may be null.
      */
     private void init(Context context, AttributeSet attributeSet) {
-        //initialize soundPlayer. This will create and return an instance of the singleton class
-        // SoundPlayer if no instance has already been instantiated in this application but if an instance
-        //already exist in thi application, that instance is returned
-        //
-        soundPlayer = SoundPlayer.getInstance(context);
 
         inflate(context, R.layout.view_dial_button, this);
 
@@ -123,8 +116,10 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
         zoom_in = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.zoom_in);
         setVisibility(View.VISIBLE);
         startAnimation(zoom_in);
+        // Get the an instance of the singleton class SoundPlayer
+        // the reference to this instance should not be stored in this class
         // Call soundPlayer class method to play sound and pass the reference of this dial button
-        soundPlayer.playSound(this);
+        SoundPlayer.getInstance(getContext()).playSound(this);
 
     }
 }

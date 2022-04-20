@@ -9,5 +9,9 @@ public class DialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dial);
+        // Initialize the singleton class SoundPlayer instance to make sure the sounds are completely
+        // loaded and ready to be used by child activity DialButtonView.
+        // Instantiating ensures that all 12 buttons do not need to instantiate
+        SoundPlayer.getInstance(getApplicationContext());
     }
 }
