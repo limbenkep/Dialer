@@ -22,6 +22,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Context context = getApplicationContext();
+
+        //Check if default voice has been copied to internal storage , if not copy.
+        if(!Util.defaultVoiceExist(context)){
+            try{
+                boolean soundsCopied = Util.copyDefaultVoiceToInternalStorage(context);
+            }catch (Exception e){
+                Log.e(TAG, "Error copying default voice to internal storage "+ ": " + e);
+            }
+
+        }
 
         //get the reference to the about button that opens about activity on click
         Button about = findViewById(R.id.aboutButton);
