@@ -14,4 +14,7 @@
     <fraction name="lower_mid_guideline_dimen">.725</fraction>
     <fraction name="dial_pad_button_width">.25</fraction>
     <fraction name="dial_pad_button_height">.2</fraction>
+    <fraction name="three_quarters">.75</fraction>
+    <fraction name="display_area_button_width">.2</fraction>
+    <fraction name="display_area_button_height">.15</fraction>
 </resources>

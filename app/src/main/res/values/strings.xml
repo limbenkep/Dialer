@@ -60,4 +60,5 @@
     <string name="plus_sign">+</string>
     <string name="star_symbol">*</string>
     <string name="hashtag_symbol">#</string>
+    <string name="letter_x">x</string>
 </resources>
