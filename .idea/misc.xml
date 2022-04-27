@@ -5,16 +5,19 @@
       <map>
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/drawable/delete_button_background.xml" value="0.3105" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/drawable/dial_button_background.xml" value="0.381" />
+        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.3275" />
+        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.3275" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout-land/activity_dial.xml" value="0.268" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout-land/activity_main.xml" value="0.44000000000000006" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout-land/dialpad.xml" value="0.4" />
+        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout-land/view_display_area.xml" value="0.1" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/activity_call_list.xml" value="0.4" />
-        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/activity_dial.xml" value="0.1" />
+        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/activity_dial.xml" value="0.2" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/activity_main.xml" value="0.4786516853932584" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/dialpad.xml" value="0.20906370243693886" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/settings_activity.xml" value="0.4" />
         <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/view_dial_button.xml" value="0.132" />
-        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/view_display_area.xml" value="0.4553227875160325" />
+        <entry key="..\:/Users/limbe/Programming/DT031G/app/src/main/res/layout/view_display_area.xml" value="0.1" />
       </map>
     </option>
   </component>

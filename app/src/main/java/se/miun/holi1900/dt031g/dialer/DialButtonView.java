@@ -18,6 +18,27 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
     private TextView titleView;
     private TextView messageView;
 
+    /**
+     * Interface definition for a callback to be invoked when the DialButtonView is
+     * is clicked. The color change happens when the button is clicked.
+     */
+    public interface OnClickedListener{
+        void onClick(DialButtonView dialButtonView);
+    }
+
+    /**
+     * Listener used to dispatch click events to.
+     */
+    private  DialButtonView.OnClickedListener listener;
+
+    /**
+     * Register a callback to be invoked when the button is clicked.
+     *
+     * @param listener The callback that will run when this button is clicked
+     */
+    public void setOnClickedListener(OnClickedListener listener){
+        this.listener = listener;
+    }
 
     /**
      * Constructor to use when creating a DialButtonView from code.
@@ -112,6 +133,10 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
      */
     @Override
     public void onClick(View view) {
+        //When this button is clicked, call the dial button's  custom onClickedListener if one is set.
+        if(listener!=null){
+            listener.onClick(this);
+        }
         //Get zoom in animation from resource, set visibility and start animation
         zoom_in = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.zoom_in);
         setVisibility(View.VISIBLE);
@@ -120,6 +145,5 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
         // the reference to this instance should not be stored in this class
         // Call soundPlayer class method to play sound and pass the reference of this dial button
         SoundPlayer.getInstance(getContext()).playSound(this);
-
     }
 }
