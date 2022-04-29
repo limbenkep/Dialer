@@ -2,6 +2,7 @@ package se.miun.holi1900.dt031g.dialer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
@@ -16,46 +17,49 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 
 import java.net.URI;
 import java.net.URLEncoder;
 
 public class DisplayAreaView extends ConstraintLayout {
     private TextView textView;
-    private ImageButton call_button;
-    private Button delete_button;
+    SharedPreferences sharedPreferences;
 
 
     public DisplayAreaView(@NonNull Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
     public DisplayAreaView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(Context context, AttributeSet attributeSet){
+    private void init(Context context){
         inflate(context, R.layout.view_display_area, this);
 
+        sharedPreferences = context.getSharedPreferences("dial_numbers", Context.MODE_PRIVATE);
         textView = findViewById(R.id.display_area_textView);
 
-        call_button = findViewById(R.id.display_area_call_button);
+        ImageButton call_button = findViewById(R.id.display_area_call_button);
         call_button.setOnClickListener(view -> {
             //get phone number displayed on dial pad
             CharSequence phoneNumber = textView.getText();
             Log.d("Assignment5", "The phone number to be dialed is"+ ": " + phoneNumber);
+
+            savePhoneNumber(phoneNumber.toString(), context);
             //make phone call
             dialPhoneNumber(context, phoneNumber);
         });
 
-        delete_button = findViewById(R.id.display_area_delete_button);
-        delete_button.setOnClickListener(view -> {
-            //Delete the last digit of the number on the display area
-            deleteOneNumber();
-        });
+        Button delete_button = findViewById(R.id.display_area_delete_button);
 
+        //Set click listener to delete button which delete the last dialed number on click
+        delete_button.setOnClickListener(view -> deleteOneNumber());
+
+        //Set listener  for long click to delete button which delete all displayed numbers on long click
         delete_button.setOnLongClickListener(view -> {
             clearNumber();
             return true;
@@ -88,7 +92,6 @@ public class DisplayAreaView extends ConstraintLayout {
         else{
             Toast.makeText(context, "Enter Phone number", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     /**
@@ -112,6 +115,18 @@ public class DisplayAreaView extends ConstraintLayout {
             invalidate();
             requestLayout();
         }
+    }
 
+    /**
+     * saves dialed number to shared preference in the setting to store dialed number is selected
+     * @param phoneNumber dialed number
+     * @param context context
+     */
+    private void savePhoneNumber(String phoneNumber, Context context){
+        if(SettingsActivity.shouldStoreNumbers(context)){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(phoneNumber, phoneNumber);
+            editor.apply();
+        }
     }
 }

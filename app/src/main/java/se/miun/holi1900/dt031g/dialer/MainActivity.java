@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called when the DIAL button is clicked. Displays dialpad
-     * @param view
+     * @param view view
      */
     public void displayKeyPad(View view) {
         startActivity(new Intent(this, DialActivity.class));
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when the about button is clicked. Displays a dialog box with information on the
      * features of this application
-     * @param view
+     * @param view view
      */
     public void openAboutDialog(View view){
         if(!aboutPageOpened){
