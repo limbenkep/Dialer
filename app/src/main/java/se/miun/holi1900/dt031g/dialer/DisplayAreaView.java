@@ -1,5 +1,6 @@
 package se.miun.holi1900.dt031g.dialer;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import java.net.URI;
@@ -85,9 +87,23 @@ public class DisplayAreaView extends ConstraintLayout {
      */
     public void dialPhoneNumber(Context context, CharSequence phoneNumber) {
         if(phoneNumber.length()>0){
-            Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + phoneNumber));
+            Intent intent;
+
+            if (ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.CALL_PHONE) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // Make intent of with a call action
+                intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+
+            } else {
+                // Make intent of with a dial action
+                intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+            }
+            //start the activity to make the phone call
             context.startActivity(intent);
+
         }
         else{
             Toast.makeText(context, "Enter Phone number", Toast.LENGTH_SHORT).show();

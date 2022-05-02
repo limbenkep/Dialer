@@ -1,15 +1,26 @@
 package se.miun.holi1900.dt031g.dialer;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class DialActivity extends AppCompatActivity {
+
+    private int call_permission_code = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +30,11 @@ public class DialActivity extends AppCompatActivity {
         // loaded and ready to be used by child activity DialButtonView.
         // Instantiating ensures that all 12 buttons do not need to instantiate
         SoundPlayer.getInstance(getApplicationContext());
+
+        if (ContextCompat.checkSelfPermission(DialActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            requestCallPermission();
+        }
     }
 
     /**
@@ -47,4 +63,21 @@ public class DialActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    void requestCallPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("By granting the permission to make and manage phone calls, your " +
+                            "call will be started immediately. If you deny the permission, you will" +
+                            " have to explicitly initiate the call")
+                    .setPositiveButton("Ok", (dialogInterface, i) -> ActivityCompat.requestPermissions(DialActivity.this,
+                            new String[] {Manifest.permission.CALL_PHONE}, call_permission_code))
+                    .create().show();
+        }
+        else{
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CALL_PHONE}, call_permission_code);
+        }
+    }
+
 }
