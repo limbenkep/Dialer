@@ -25,12 +25,13 @@
         android:id="@+id/dialButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="140dp"
         android:onClick="displayKeyPad"
         android:text="@string/dial_button_text"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/settingsButton"
         app:layout_constraintEnd_toEndOf="@+id/settingsButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/settingsButton" />
 
     <Button
@@ -56,9 +57,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.565" />
 
     <Button
         android:id="@+id/mapButton"
@@ -83,4 +85,15 @@
         app:layout_constraintEnd_toEndOf="@+id/settingsButton"
         app:layout_constraintStart_toStartOf="@+id/settingsButton"
         app:layout_constraintTop_toBottomOf="@+id/settingsButton" />
+
+    <Button
+        android:id="@+id/downloadVoicesButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:onClick="downloadVoices"
+        android:text="@string/download_voices"
+        app:layout_constraintBottom_toTopOf="@+id/callListButton"
+        app:layout_constraintEnd_toEndOf="@+id/settingsButton"
+        app:layout_constraintStart_toStartOf="@+id/settingsButton"
+        app:layout_constraintTop_toBottomOf="@+id/dialButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, DialActivity.class));
     }
 
+    /**Called when the Download voices button is clicked*/
+    public void downloadVoices(View view) {
+        startActivity(new Intent(this, DownloadActivity.class));
+    }
+
     /**Called when the Call List button is clicked*/
     public void displayCallList(View view) {
         startActivity(new Intent(this, CallListActivity.class));
