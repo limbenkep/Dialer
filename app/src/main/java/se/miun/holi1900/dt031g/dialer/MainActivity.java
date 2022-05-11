@@ -97,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**Called when the Download voices button is clicked*/
     public void downloadVoices(View view) {
-        startActivity(new Intent(this, DownloadActivity.class));
+        Intent intent = new Intent(this, DownloadActivity.class);
+        intent.putExtra(getString(R.string.voices_storage_location),getString(R.string.voices_website_url));
+        intent.putExtra(getString(R.string.voices_storage_location_put_extra_key) ,getString(R.string.voices_storage_location));
+        startActivity(intent);
     }
 
     /**Called when the Call List button is clicked*/
