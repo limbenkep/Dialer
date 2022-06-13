@@ -58,6 +58,10 @@ public class DialActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+        if(item.getItemId()==R.id.download_voices_option){
+            startActivity(new Intent(this, DownloadActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -94,13 +94,12 @@ public class DisplayAreaView extends ConstraintLayout {
                     PackageManager.PERMISSION_GRANTED) {
                 // Make intent of with a call action
                 intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
 
             } else {
                 // Make intent of with a dial action
                 intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
             }
+            intent.setData(Uri.parse("tel:" + phoneNumber));
             //start the activity to make the phone call
             context.startActivity(intent);
 

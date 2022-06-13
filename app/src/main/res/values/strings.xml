@@ -63,4 +63,9 @@
     <string name="voices_storage_location">/&lt;app-specific-storage&gt;/voices/</string>
     <string name="voices_website_url_put_extra_key">voices_website_url</string>
     <string name="voices_storage_location_put_extra_key">voices_storage_location</string>
+    <string name="voices_directory">voices</string>
+    <string name="downloaded_voices_file">downloadedVoices.zip</string>
+    <string name="downloaded_file_prefix">downloadedVoices</string>
+    <string name="voices">Voices</string>
+    <string name="voices_key">voices_key</string>
 </resources>

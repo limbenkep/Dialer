@@ -1,7 +1,11 @@
 package se.miun.holi1900.dt031g.dialer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -233,5 +237,17 @@ public class Util {
             }
         }
         return true;
+    }
+
+    /**
+     * gets the value of a sharedpreference
+     * @param key preference key
+     * @param defaultValue default value of the preference
+     * @param context context
+     * @return value of the sharedPreference or the default value
+     */
+    public static String getPreferenceSummary(String key, String defaultValue, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, DEFAULT_VOICE);
     }
 }

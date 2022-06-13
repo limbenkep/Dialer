@@ -7,4 +7,9 @@
         app:key="@string/delete_number_key"
         app:summary="@string/summary_delete_number"
         app:title="@string/delete_stored_numbers" />
+    <ListPreference
+        app:key="@string/voices_key"
+        app:title="@string/voices"
+        app:summary="%s"
+        app:useSimpleSummaryProvider="true"/>
 </PreferenceScreen>

@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.
                 getDefaultSharedPreferences(context);
         return sharedPreferences.getBoolean(
-                context.getString(R.string.store_number_key), true); // default true
+                context.getString(R.string.store_number_key), false); // default true
     }
 
 }

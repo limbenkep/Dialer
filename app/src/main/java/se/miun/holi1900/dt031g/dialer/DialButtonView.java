@@ -20,7 +20,7 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
 
     /**
      * Interface definition for a callback to be invoked when the DialButtonView is
-     * is clicked. The color change happens when the button is clicked.
+     * is clicked.
      */
     public interface OnClickedListener{
         void onClick(DialButtonView dialButtonView);
@@ -129,7 +129,7 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
      * overrides the onClick method of the OnClickListener class
      * on click the button animated with a zoomed in animation and plays sound that says the title of
      * the button
-     * @param view
+     * @param view view
      */
     @Override
     public void onClick(View view) {

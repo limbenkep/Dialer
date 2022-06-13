@@ -40,7 +40,9 @@ public class SoundPlayer {
         for (Map.Entry<String, String> entry : Util.DEFAULT_VOICE_FILE_NAMES.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            String path = Util.getVoiceFilePath(Util.getDirForDefaultVoice(context), value);
+            String prefKey = context.getString(R.string.voices_key);
+            String fileName = Util.getPreferenceSummary(prefKey, Util.DEFAULT_VOICE, context);
+            String path = Util.getVoiceFilePath(Util.getDirForVoice(context, fileName), value);
             soundIds.put(key, soundPool.load(path, 1));
         }
     }
