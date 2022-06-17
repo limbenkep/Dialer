@@ -1,5 +1,6 @@
 package se.miun.holi1900.dt031g.dialer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -319,5 +320,6 @@ public class DownloadActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         }
     }
+
 
 }

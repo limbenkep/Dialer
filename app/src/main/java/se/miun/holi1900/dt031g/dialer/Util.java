@@ -22,6 +22,8 @@ import java.util.zip.ZipFile;
 public class Util {
     private static final String TAG = "Util";
 
+    public static  final String DATABASE_TABLE_NAME = "calls_info_table";
+
     /**
      * The directory in which all voices for the Dialer app are stored (in the app-specific
      * internal storage location).

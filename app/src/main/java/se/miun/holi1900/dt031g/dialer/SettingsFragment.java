@@ -78,5 +78,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             voicesPref.setEntryValues(voices);
         }
     }
-
 }

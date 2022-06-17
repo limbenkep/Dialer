@@ -5,11 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
+import android.location.Location;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,15 +17,27 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 
-import java.net.URI;
-import java.net.URLEncoder;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import se.miun.holi1900.dt031g.dialer.database.CallInfo;
+import se.miun.holi1900.dt031g.dialer.database.CallInfoRepository;
 
 public class DisplayAreaView extends ConstraintLayout {
+    private static final String TAG = "DisplayAreaView";
     private TextView textView;
     SharedPreferences sharedPreferences;
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    public FusedLocationProviderClient fusedLocationClient;
+    private Location currentLocation;
 
 
     public DisplayAreaView(@NonNull Context context) {
@@ -41,7 +52,7 @@ public class DisplayAreaView extends ConstraintLayout {
 
     private void init(Context context){
         inflate(context, R.layout.view_display_area, this);
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         sharedPreferences = context.getSharedPreferences("dial_numbers", Context.MODE_PRIVATE);
         textView = findViewById(R.id.display_area_textView);
 
@@ -50,8 +61,9 @@ public class DisplayAreaView extends ConstraintLayout {
             //get phone number displayed on dial pad
             CharSequence phoneNumber = textView.getText();
             Log.d("Assignment5", "The phone number to be dialed is"+ ": " + phoneNumber);
+            getDeviceLocation(context);
 
-            savePhoneNumber(phoneNumber.toString(), context);
+            saveCallInfo(phoneNumber.toString(),getCurrentDateAndTime(), currentLocation, context);
             //make phone call
             dialPhoneNumber(context, phoneNumber);
         });
@@ -110,7 +122,7 @@ public class DisplayAreaView extends ConstraintLayout {
     }
 
     /**
-     * Deletes the last digit of the pphone number displayed on the displaya area
+     * Deletes the last digit of the phone number displayed on the display area
      */
     public void deleteOneNumber(){
         CharSequence currentText = textView.getText();
@@ -133,15 +145,46 @@ public class DisplayAreaView extends ConstraintLayout {
     }
 
     /**
-     * saves dialed number to shared preference in the setting to store dialed number is selected
+     * save call information to the database
      * @param phoneNumber dialed number
+     * @param date date and time call was made
+     * @param location location call was made
      * @param context context
      */
-    private void savePhoneNumber(String phoneNumber, Context context){
-        if(SettingsActivity.shouldStoreNumbers(context)){
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(phoneNumber, phoneNumber);
-            editor.apply();
+    private void saveCallInfo(String phoneNumber, Date date, Location location, Context context){
+        CallInfoRepository repo = new CallInfoRepository(context);
+        CallInfo callInfo = new CallInfo();
+        callInfo.phoneNumber = phoneNumber;
+        callInfo.date = DateFormat.getInstance().format(date);
+        if(location != null){
+            callInfo.latitude = location.getLatitude();
+            callInfo.longitude = location.getLongitude();
+        }
+        repo.insertCallInfo(callInfo);
+    }
+
+    /**
+     * Get the device location
+     */
+    public void getDeviceLocation(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    currentLocation = location;
+                }
+            });
+        } else {
+            currentLocation = null;
         }
     }
+
+    private Date getCurrentDateAndTime(){
+        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = sdf.format(c.getTime());
+        Log.d(TAG, "DATE : " + strDate);*/
+        return Calendar.getInstance().getTime();
+    }
+
 }
