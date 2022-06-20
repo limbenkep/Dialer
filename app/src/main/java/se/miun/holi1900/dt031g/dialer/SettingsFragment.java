@@ -25,7 +25,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
         if(delete_numbers!=null){
             delete_numbers.setOnPreferenceClickListener(preference ->
-                    CallListActivity.deleteStoredPhoneNumbers(getContext(), "dial_numbers"));
+                    CallListActivity.deleteStoredPhoneNumbers(requireContext()));
         }
         if(voicesPref != null){
             updateVoicesPreference();

@@ -1,8 +1,5 @@
 package se.miun.holi1900.dt031g.dialer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -11,14 +8,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import se.miun.holi1900.dt031g.dialer.database.CallInfo;
+import se.miun.holi1900.dt031g.dialer.database.CallInfoRepository;
+
 public class CallListActivity extends AppCompatActivity {
+    private static final String TAG = "CallListActivity";
+
+    protected RecyclerView.LayoutManager layoutManager;
+    protected RecyclerView recyclerView;
+    protected CallInfoAdapter callInfoAdapter;
 
     private SharedPreferences sharedPreferences;
     private final ArrayList<String> savedPhoneNumbers = new ArrayList<>();
@@ -28,18 +40,32 @@ public class CallListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_list);
-        sharedPreferences = getSharedPreferences(phoneNumbersFile, Context.MODE_PRIVATE);
-        //copy numbers from sharedPreference and store in the class arrayList
-        getStorePhoneNumbers();
 
-        //load adapter with list data and the layout sating the properties of each list item
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.activity_list_view, savedPhoneNumbers);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView = findViewById(R.id.recyclerView);
+        TextView defaultTextView = findViewById(R.id.default_text_view);
+        new CallInfoRepository(this).getAllCallInfo().observe(this, callData->{
+            Collections.sort(callData);
+            Collections.reverse(callData);
 
-        //Pass adapter to listView to be displayed
-        ListView listView = (ListView) findViewById(R.id.phone_number_list);
-        listView.setAdapter(adapter);
+            Log.d(TAG, "onCreate: list size: " + callData.size());
+            callInfoAdapter = new CallInfoAdapter(callData);
+            if(callInfoAdapter.getItemCount() !=0){
+                defaultTextView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setAdapter(callInfoAdapter);
+
+            }
+            else{
+                defaultTextView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                defaultTextView.setText(getString(R.string.empty_call_list_message));
+            }
+        });
     }
+
 
     /**
      * Called when the menu is opened for the first time. Inflates the menu resource to the menu
@@ -47,7 +73,7 @@ public class CallListActivity extends AppCompatActivity {
      * @return true
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete_number_menu, menu);
         return true;
@@ -62,7 +88,7 @@ public class CallListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //if selected item is settings option start the setting activity
         if(item.getItemId()==R.id.delete_stored_numbers){
-            boolean fileDeleted = deleteStoredPhoneNumbers(this, phoneNumbersFile);
+            boolean fileDeleted = deleteStoredPhoneNumbers(this);
 
             //redraw view after deleting list
             startActivity(getIntent());
@@ -74,33 +100,14 @@ public class CallListActivity extends AppCompatActivity {
     }
 
     /**
-     * Read stored numbers from the file dial_numbers in sharedPreference  to a Map.
-     * Get the list os all the values from the map and store in the class arrayList
-     */
-    private void getStorePhoneNumbers(){
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            final String key = entry.getKey();
-            final String value = entry.getValue().toString();
-            savedPhoneNumbers.add(value);
-        }
-
-    }
-
-    /**
-     * Deletes a file from sharedPreference
+     * Deletes all call records from database
      * @param context the activity
-     * @param fileName the name of the file to be deleted
      *
-     * @return true if file is successfully deleted else false
+     * @return true
      */
-    public static boolean deleteStoredPhoneNumbers(Context context, String fileName){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return context.deleteSharedPreferences(fileName);
-        } else {
-            context.getSharedPreferences(fileName, MODE_PRIVATE).edit().clear().apply();
-            File dir = new File(context.getApplicationInfo().dataDir, "shared_prefs");
-            return new File(dir, fileName + ".xml").delete();
-        }
+    public static boolean deleteStoredPhoneNumbers(Context context){
+        CallInfoRepository repo = new CallInfoRepository(context);
+        repo.deleteAllCallRecords();
+        return true;
     }
 }

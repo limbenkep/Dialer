@@ -25,10 +25,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import se.miun.holi1900.dt031g.dialer.database.CallInfo;
+import se.miun.holi1900.dt031g.dialer.database.CallInfoRepository;
 import se.miun.holi1900.dt031g.dialer.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
@@ -36,13 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final int LOCATION_ACCESS_CODE = 999;
-    private int bathingSiteRadius;
-    TextView radiusText;
-    private FusedLocationProviderClient fusedLocationClient;
-    private final float DEFAULT_ZOOM = 15f;
-    private Location currentLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     /**
@@ -72,130 +68,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        getDeviceLocation();
-
+        LatLngBounds latLngBounds = new LatLngBounds( new LatLng(55.001099, 11.10694), new LatLng(69.063141,
+                24.16707));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 0));
+        markCallLocations();
         mMap.setOnInfoWindowClickListener(this);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setAllGesturesEnabled(true);
-        createLocationRequest();
+
     }
 
-    /**
-     * Get the device location
-     */
-    public void getDeviceLocation() {
-        if (ActivityCompat.checkSelfPermission(this, FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                setCurrentLocation(location);
-                                moveCamera(new LatLng(location.getLatitude(), location.getLongitude()),
-                                        DEFAULT_ZOOM);
-                                mMap.addMarker(new MarkerOptions().position(
-                                        new LatLng(location.getLatitude(), location.getLongitude())).title(
-                                        "Your current location: [" + location.getLatitude() + ", " +
-                                                location.getLongitude() + "]"));
+    private void markCallLocations(){
+        new CallInfoRepository(this)
+                .getAllCallInfo().observe(this, callData->{
+                    if(callData.size()!=0){
+                        for(int i=0; i<callData.size(); i++){
+                            CallInfo callInfo = callData.get(i);
+                            if(callInfo.latitude!=0 && callInfo.longitude!=0){
 
-                            } else {
-                                new AlertDialog.Builder(MapsActivity.this)
-                                        .setTitle("GPS signal " + "turned off")
-                                        .setMessage("Please turn on your device location")
-                                        .setPositiveButton("OK", (dialogInterface, i) -> {
-                                            //Prompt the user once explanation has been shown
-                                            ActivityCompat.requestPermissions(MapsActivity.this,
-                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                                    LOCATION_ACCESS_CODE );
-                                        }).create().show();
-
+                                LatLng latLng = new LatLng(callInfo.latitude, callInfo.longitude);
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(callInfo.phoneNumber));
                             }
                         }
-                    });
+                    }
 
-        } else {
-            requestLocationPermission();
-        }
+                });
     }
 
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(final Location currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
-    private void createLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-    private void moveCamera(LatLng latLng, float zoom) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " +
-                latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    }
-
-    /**
-     * Request permission data if permission is not set
-     */
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(MapsActivity.this, FINE_LOCATION)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Location Permission Needed")
-                    .setMessage("This app needs the Location permission, please accept to use location functionality")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            sendLocationRequest();
-                        }
-                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                            Toast.makeText(MapsActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-                        }
-                    }).create().show();
-        } else {
-            sendLocationRequest();
-        }
-    }
-
-    /**
-     * Send request to get location permission
-     */
-    private void sendLocationRequest() {
-        ActivityCompat
-                .requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_ACCESS_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(final int requestCode,
-                                           @NonNull final String[] permissions,
-                                           @NonNull final int[] grantResults) {
-        if (requestCode == LOCATION_ACCESS_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getDeviceLocation();
-            } else {
-                Toast.makeText(MapsActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {

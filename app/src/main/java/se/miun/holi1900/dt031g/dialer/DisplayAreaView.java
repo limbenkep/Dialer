@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Button;
@@ -21,12 +22,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import se.miun.holi1900.dt031g.dialer.database.CallInfo;
 import se.miun.holi1900.dt031g.dialer.database.CallInfoRepository;
@@ -38,6 +41,9 @@ public class DisplayAreaView extends ConstraintLayout {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
+    private LocationRequest locationRequest;
+    double latitude;
+    double longitude;
 
 
     public DisplayAreaView(@NonNull Context context) {
@@ -50,8 +56,14 @@ public class DisplayAreaView extends ConstraintLayout {
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         inflate(context, R.layout.view_display_area, this);
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         sharedPreferences = context.getSharedPreferences("dial_numbers", Context.MODE_PRIVATE);
         textView = findViewById(R.id.display_area_textView);
@@ -60,10 +72,10 @@ public class DisplayAreaView extends ConstraintLayout {
         call_button.setOnClickListener(view -> {
             //get phone number displayed on dial pad
             CharSequence phoneNumber = textView.getText();
-            Log.d("Assignment5", "The phone number to be dialed is"+ ": " + phoneNumber);
+            Log.d("Assignment5", "The phone number to be dialed is" + ": " + phoneNumber);
             getDeviceLocation(context);
 
-            saveCallInfo(phoneNumber.toString(),getCurrentDateAndTime(), currentLocation, context);
+            saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
             //make phone call
             dialPhoneNumber(context, phoneNumber);
         });
@@ -80,25 +92,29 @@ public class DisplayAreaView extends ConstraintLayout {
         });
     }
 
+
+
     /**
      * Appends text to the textView and redraw the Display area
+     *
      * @param text the text to be appended to the text displayed on the textView in the Display area.
      */
-    public void appendText(String text){
+    public void appendText(String text) {
         textView.append(text);
         invalidate();
         requestLayout();
     }
 
 
-    /**creates an intent of type ACTION_DIAL which takes the user to the device's phone app,
-     *provide phone number to the intent and start the call
+    /**
+     * creates an intent of type ACTION_DIAL which takes the user to the device's phone app,
+     * provide phone number to the intent and start the call
      *
-     * @param context of the view
-     * @param phoneNumber  to be dialed
+     * @param context     of the view
+     * @param phoneNumber to be dialed
      */
     public void dialPhoneNumber(Context context, CharSequence phoneNumber) {
-        if(phoneNumber.length()>0){
+        if (phoneNumber.length() > 0) {
             Intent intent;
 
             if (ContextCompat.checkSelfPermission(
@@ -115,8 +131,7 @@ public class DisplayAreaView extends ConstraintLayout {
             //start the activity to make the phone call
             context.startActivity(intent);
 
-        }
-        else{
+        } else {
             Toast.makeText(context, "Enter Phone number", Toast.LENGTH_SHORT).show();
         }
     }
@@ -124,10 +139,10 @@ public class DisplayAreaView extends ConstraintLayout {
     /**
      * Deletes the last digit of the phone number displayed on the display area
      */
-    public void deleteOneNumber(){
+    public void deleteOneNumber() {
         CharSequence currentText = textView.getText();
-        if(currentText.length()>0){
-            textView.setText(currentText.subSequence(0, currentText.length()-1));
+        if (currentText.length() > 0) {
+            textView.setText(currentText.subSequence(0, currentText.length() - 1));
             invalidate();
             requestLayout();
         }
@@ -136,8 +151,8 @@ public class DisplayAreaView extends ConstraintLayout {
     /**
      * Clears all numbers in the display area
      */
-    public void clearNumber(){
-        if(textView.getText().length()>0){
+    public void clearNumber() {
+        if (textView.getText().length() > 0) {
             textView.setText("");
             invalidate();
             requestLayout();
@@ -146,32 +161,59 @@ public class DisplayAreaView extends ConstraintLayout {
 
     /**
      * save call information to the database
+     *
      * @param phoneNumber dialed number
-     * @param date date and time call was made
-     * @param location location call was made
-     * @param context context
+     * @param date        date and time call was made
+     * @param location    location call was made
+     * @param context     context
      */
-    private void saveCallInfo(String phoneNumber, Date date, Location location, Context context){
+    private void saveCallInfo(String phoneNumber, String date, Location location, Context context) {
         CallInfoRepository repo = new CallInfoRepository(context);
         CallInfo callInfo = new CallInfo();
         callInfo.phoneNumber = phoneNumber;
-        callInfo.date = DateFormat.getInstance().format(date);
-        if(location != null){
+        callInfo.date = date;
+        if (location != null) {
             callInfo.latitude = location.getLatitude();
             callInfo.longitude = location.getLongitude();
         }
         repo.insertCallInfo(callInfo);
     }
 
+
+
     /**
      * Get the device location
      */
     public void getDeviceLocation(Context context) {
-        if (ActivityCompat.checkSelfPermission(context, FINE_LOCATION) ==
+        if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
+            /*LocationServices.getFusedLocationProviderClient(getContext())
+                    .requestLocationUpdates(locationRequest, new LocationCallback() {
+                        @Override
+                        public void onLocationResult(@NonNull LocationResult locationResult) {
+                            super.onLocationResult(locationResult);
+
+                            LocationServices.getFusedLocationProviderClient(getContext())
+                                    .removeLocationUpdates(this);
+
+                            if (locationResult != null && locationResult.getLocations().size() >0){
+
+                                int index = locationResult.getLocations().size() - 1;
+                                currentLocation = locationResult.getLocations().get(index);
+                                latitude = locationResult.getLocations().get(index).getLatitude();
+                                longitude = locationResult.getLocations().get(index).getLongitude();
+
+                                Log.d(TAG, "onLocationResult: latitude = "
+                                        + latitude + ", longitude = " + longitude);
+                                //AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
+                            }
+                        }
+                    }, Looper.getMainLooper());*/
             fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
+                    Log.d(TAG, "onSuccess: Location latitude = "
+                            + location.getLatitude() + ", longitude = " + longitude);
                     currentLocation = location;
                 }
             });
@@ -180,11 +222,8 @@ public class DisplayAreaView extends ConstraintLayout {
         }
     }
 
-    private Date getCurrentDateAndTime(){
-        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = sdf.format(c.getTime());
-        Log.d(TAG, "DATE : " + strDate);*/
-        return Calendar.getInstance().getTime();
+    private String getCurrentDateAndTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(Calendar.getInstance().getTime());
     }
-
 }

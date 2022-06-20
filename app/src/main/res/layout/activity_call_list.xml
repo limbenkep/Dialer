@@ -5,10 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".CallListActivity">
 
-    <ListView
-        android:id="@+id/phone_number_list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/default_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>
