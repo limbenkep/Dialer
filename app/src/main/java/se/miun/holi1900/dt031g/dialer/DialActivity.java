@@ -42,19 +42,14 @@ public class DialActivity extends AppCompatActivity {
     private final int CALL_PERMISSION_CODE = 1;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int LOCATION_ACCESS_CODE = 999;
-    //private LocationRequest locationRequest;
-    //private FusedLocationProviderClient fusedLocationClient;
-    //private Location currentLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dial);
-        // Initialize the singleton class SoundPlayer instance to make sure the sounds are completely
-        // loaded and ready to be used by child activity DialButtonView.
-        // Instantiating ensures that all 12 buttons do not need to instantiate
         SoundPlayer.getInstance(getApplicationContext());
-        //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         if (ContextCompat.checkSelfPermission(DialActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -148,129 +143,36 @@ public class DialActivity extends AppCompatActivity {
                         LOCATION_ACCESS_CODE);
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-
-        if (requestCode == 1){
-
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                if (isGPSEnabled()) {
-
-                    getCurrentLocation();
-
-                }else {
-
-                    turnOnGPS();
-                }
-            }else {
-                Toast.makeText(DialActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
-    }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 2) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                getCurrentLocation();
-            }
-        }
-    }
-
-    private void getCurrentLocation() {
-
-        if (ActivityCompat.checkSelfPermission(DialActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            if (isGPSEnabled()) {
-
-                LocationServices.getFusedLocationProviderClient(DialActivity.this)
-                        .requestLocationUpdates(locationRequest, new LocationCallback() {
-                            @Override
-                            public void onLocationResult(@NonNull LocationResult locationResult) {
-                                super.onLocationResult(locationResult);
-
-                                LocationServices.getFusedLocationProviderClient(DialActivity.this)
-                                        .removeLocationUpdates(this);
-
-                                if (locationResult != null && locationResult.getLocations().size() >0){
-
-                                    int index = locationResult.getLocations().size() - 1;
-                                    double latitude = locationResult.getLocations().get(index).getLatitude();
-                                    double longitude = locationResult.getLocations().get(index).getLongitude();
-
-                                    Log.d(TAG, "onLocationResult: latitude = "
-                                            + latitude + ", longitude = " + longitude);
-                                    //AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
-                                }
-                            }
-                        }, Looper.getMainLooper());
-
-            } else {
-                turnOnGPS();
-            }
-
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-    }
-
-    private void turnOnGPS() {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-
-        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getApplicationContext())
-                .checkLocationSettings(builder.build());
-
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-
-                try {
-                    LocationSettingsResponse response = task.getResult(ApiException.class);
-                    Toast.makeText(DialActivity.this, "GPS is already tured on", Toast.LENGTH_SHORT).show();
-
-                } catch (ApiException e) {
-
-                    switch (e.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-
-                            try {
-                                ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                                resolvableApiException.startResolutionForResult(DialActivity.this, 2);
-                            } catch (IntentSender.SendIntentException ex) {
-                                ex.printStackTrace();
-                            }
-                            break;
-
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            //Device does not have location
-                            break;
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION_ACCESS_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(DialActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(this, "Location Permission Denied", Toast.LENGTH_SHORT).show();
                 }
+                return;
             }
-        });
-
+            case CALL_PERMISSION_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(DialActivity.this,
+                            Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Phone call Permission Granted", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Phone call Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
-
-    public boolean isGPSEnabled() {
-        LocationManager locationManager = null;
-        boolean isEnabled = false;
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        return isEnabled;
-
-    }*/
-
 
 }

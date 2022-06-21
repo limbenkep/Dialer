@@ -187,28 +187,6 @@ public class DisplayAreaView extends ConstraintLayout {
     public void getDeviceLocation(Context context) {
         if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
-            /*LocationServices.getFusedLocationProviderClient(getContext())
-                    .requestLocationUpdates(locationRequest, new LocationCallback() {
-                        @Override
-                        public void onLocationResult(@NonNull LocationResult locationResult) {
-                            super.onLocationResult(locationResult);
-
-                            LocationServices.getFusedLocationProviderClient(getContext())
-                                    .removeLocationUpdates(this);
-
-                            if (locationResult != null && locationResult.getLocations().size() >0){
-
-                                int index = locationResult.getLocations().size() - 1;
-                                currentLocation = locationResult.getLocations().get(index);
-                                latitude = locationResult.getLocations().get(index).getLatitude();
-                                longitude = locationResult.getLocations().get(index).getLongitude();
-
-                                Log.d(TAG, "onLocationResult: latitude = "
-                                        + latitude + ", longitude = " + longitude);
-                                //AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
-                            }
-                        }
-                    }, Looper.getMainLooper());*/
             fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
