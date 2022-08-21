@@ -1,25 +1,10 @@
 package se.miun.holi1900.dt031g.dialer;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,7 +13,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import se.miun.holi1900.dt031g.dialer.database.CallInfo;
 import se.miun.holi1900.dt031g.dialer.database.CallInfoRepository;
@@ -65,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
         LatLngBounds latLngBounds = new LatLngBounds( new LatLng(55.001099, 11.10694), new LatLng(69.063141,
@@ -80,6 +64,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * Marks locations calls were made on the map and
+     * when the location icon is clicked the phone number and
+     * the date is displayed
+     */
     private void markCallLocations(){
         new CallInfoRepository(this)
                 .getAllCallInfo().observe(this, callData->{
@@ -87,13 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         for(int i=0; i<callData.size(); i++){
                             CallInfo callInfo = callData.get(i);
                             if(callInfo.latitude!=0 && callInfo.longitude!=0){
-
                                 LatLng latLng = new LatLng(callInfo.latitude, callInfo.longitude);
-                                mMap.addMarker(new MarkerOptions().position(latLng).title(callInfo.phoneNumber));
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .title(callInfo.phoneNumber)
+                                        .snippet(callInfo.date));
                             }
                         }
                     }
-
                 });
     }
 
