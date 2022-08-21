@@ -1,24 +1,17 @@
 package se.miun.holi1900.dt031g.dialer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.Manifest;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
@@ -28,12 +21,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -42,7 +37,7 @@ public class DownloadActivity extends AppCompatActivity {
 
     private static final String URL_VOICES ="https://dt031g.programvaruteknik.nu/dialer/voices/";
     private WebView voicesWebView;
-    //private static final String DOWNLOADED_VOICES = "downloadedVoices.zip";
+    private static final String DOWNLOADED_VOICES = "downloadedVoices.zip";
     private BroadcastReceiver receiver;
     private ConstraintLayout progressdialog;
     private DownloadVoicesAsyncTask download;
@@ -55,13 +50,6 @@ public class DownloadActivity extends AppCompatActivity {
         voicesWebView = findViewById(R.id.voices_webview);
         voicesWebView.loadUrl(URL_VOICES);
 
-        //Runtime External storage permission for saving download files
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-            Log.d("permission", "permission denied to WRITE_EXTERNAL_STORAGE - requesting it");
-            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            requestPermissions(permissions, 1);
-        }
 
         ProgressDialog progressDialog =
                 ProgressDialog.show(this, "", "Loading...",true);
@@ -115,7 +103,7 @@ public class DownloadActivity extends AppCompatActivity {
                             request.allowScanningByMediaScanner();
                             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                             request.setDestinationInExternalPublicDir(
-                                    Environment.DIRECTORY_DOWNLOADS, getString(R.string.downloaded_voices_file));
+                                    Environment.DIRECTORY_DOWNLOADS, DOWNLOADED_VOICES);
                             DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                             dm.enqueue(request);
                         }
@@ -132,6 +120,7 @@ public class DownloadActivity extends AppCompatActivity {
                             public void onReceive(Context context, Intent intent) {
                                 String action = intent.getAction();
                                 if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                                    dialog.dismiss();
 
                                     Toast.makeText(context, "Download completed", Toast.LENGTH_SHORT).show();
                                     File sourceFile = new File(
@@ -271,7 +260,7 @@ public class DownloadActivity extends AppCompatActivity {
                 BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
                 File file = new File(
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        getText(R.string.downloaded_voices_file).toString());
+                        DOWNLOADED_VOICES);
                 FileOutputStream fos = new FileOutputStream(file);
                 BufferedOutputStream out = new BufferedOutputStream(fos, 1024);
                 byte[] buffer = new byte[1024];
@@ -307,7 +296,7 @@ public class DownloadActivity extends AppCompatActivity {
 
             File sourceFile = new File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    getText(R.string.downloaded_voices_file).toString());
+                    DOWNLOADED_VOICES);
             File destinationFile = new File(getApplicationContext().getFilesDir(), getText(R.string.voices_directory).toString());
             String text;
             if(!Util.unzip(sourceFile, destinationFile)){

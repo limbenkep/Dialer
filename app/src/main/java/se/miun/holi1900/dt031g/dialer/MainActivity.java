@@ -1,18 +1,15 @@
 package se.miun.holi1900.dt031g.dialer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     //variable that keeps track of the state of the About page. Set to tru when the about button is clicked
@@ -97,10 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**Called when the Download voices button is clicked*/
     public void downloadVoices(View view) {
-        Intent intent = new Intent(this, DownloadActivity.class);
-        intent.putExtra(getString(R.string.voices_storage_location),getString(R.string.voices_website_url));
-        intent.putExtra(getString(R.string.voices_storage_location_put_extra_key) ,getString(R.string.voices_storage_location));
-        startActivity(intent);
+        startActivity(new Intent(this, DownloadActivity.class));
     }
 
     /**Called when the Call List button is clicked*/

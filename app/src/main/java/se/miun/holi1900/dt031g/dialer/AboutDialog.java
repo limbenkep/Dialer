@@ -2,7 +2,6 @@ package se.miun.holi1900.dt031g.dialer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

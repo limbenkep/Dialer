@@ -60,7 +60,6 @@
     <string name="settings">Settings</string>
     <string name="download_voices">DOWNLOAD VOICES</string>
     <string name="voices_website_url">https://dt031g.programvaruteknik.nu/dialer/voices/</string>
-    <string name="voices_storage_location">/&lt;app-specific-storage&gt;/voices/</string>
     <string name="voices_website_url_put_extra_key">voices_website_url</string>
     <string name="voices_storage_location_put_extra_key">voices_storage_location</string>
     <string name="voices_directory">voices</string>
