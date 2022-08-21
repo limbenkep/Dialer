@@ -1,6 +1,5 @@
 package se.miun.holi1900.dt031g.dialer;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;

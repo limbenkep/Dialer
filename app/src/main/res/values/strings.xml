@@ -70,6 +70,6 @@
     <string name="phone_number">Phone number</string>
     <string name="location">Location</string>
     <string name="call_date">Call date</string>
-    <string name="call_location_varable_string">[%1$d, %2$d]</string>
+    <string name="call_location_varable_string">[%1$f, %2$f]</string>
     <string name="empty_call_list_message">The call list is empty.</string>
 </resources>

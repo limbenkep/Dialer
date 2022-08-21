@@ -42,8 +42,9 @@ public class DisplayAreaView extends ConstraintLayout {
     public FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
     private LocationRequest locationRequest;
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
+    CharSequence phoneNumber;
 
 
     public DisplayAreaView(@NonNull Context context) {
@@ -71,11 +72,11 @@ public class DisplayAreaView extends ConstraintLayout {
         ImageButton call_button = findViewById(R.id.display_area_call_button);
         call_button.setOnClickListener(view -> {
             //get phone number displayed on dial pad
-            CharSequence phoneNumber = textView.getText();
+            phoneNumber = textView.getText();
             Log.d("Assignment5", "The phone number to be dialed is" + ": " + phoneNumber);
             getDeviceLocation(context);
 
-            saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
+            //saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
             //make phone call
             dialPhoneNumber(context, phoneNumber);
         });
@@ -172,11 +173,12 @@ public class DisplayAreaView extends ConstraintLayout {
         CallInfo callInfo = new CallInfo();
         callInfo.phoneNumber = phoneNumber;
         callInfo.date = date;
-        if (location != null) {
-            callInfo.latitude = location.getLatitude();
-            callInfo.longitude = location.getLongitude();
-        }
+        callInfo.latitude = latitude;
+        callInfo.longitude = longitude;
         repo.insertCallInfo(callInfo);
+
+        Log.d(TAG, "saveCallInfo: latitude: " + latitude + " Longitude: " + longitude);
+        Log.d(TAG, "saveCallInfo: call latitude: " + callInfo.latitude + " call Longitude: " + callInfo.longitude);
     }
 
 
@@ -190,13 +192,18 @@ public class DisplayAreaView extends ConstraintLayout {
             fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    Log.d(TAG, "onSuccess: Location latitude = "
-                            + location.getLatitude() + ", longitude = " + longitude);
-                    currentLocation = location;
+                    if(location !=null){
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        Log.d(TAG, "onSuccess: Location latitude = "
+                                + latitude + ", longitude = " + longitude);
+                        saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
+
+                    }
                 }
             });
         } else {
-            currentLocation = null;
+            saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
         }
     }
 
