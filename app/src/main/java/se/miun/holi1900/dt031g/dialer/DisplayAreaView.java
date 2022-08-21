@@ -76,7 +76,6 @@ public class DisplayAreaView extends ConstraintLayout {
             Log.d("Assignment5", "The phone number to be dialed is" + ": " + phoneNumber);
             getDeviceLocation(context);
 
-            //saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
             //make phone call
             dialPhoneNumber(context, phoneNumber);
         });
@@ -184,7 +183,10 @@ public class DisplayAreaView extends ConstraintLayout {
 
 
     /**
-     * Get the device location
+     * Get the device location.
+     * If location permission is granted the location is obtained and
+     * the call information is saved
+     * If location permission is not granted, the call information is saved without location
      */
     public void getDeviceLocation(Context context) {
         if (ContextCompat.checkSelfPermission(context, FINE_LOCATION) ==
@@ -198,7 +200,6 @@ public class DisplayAreaView extends ConstraintLayout {
                         Log.d(TAG, "onSuccess: Location latitude = "
                                 + latitude + ", longitude = " + longitude);
                         saveCallInfo(phoneNumber.toString(), getCurrentDateAndTime(), currentLocation, context);
-
                     }
                 }
             });
@@ -207,6 +208,10 @@ public class DisplayAreaView extends ConstraintLayout {
         }
     }
 
+    /**
+     * Get the current date and time
+     * @return date and time as a string in format "yyyy-MM-dd HH:mm:ss"
+     */
     private String getCurrentDateAndTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(Calendar.getInstance().getTime());
