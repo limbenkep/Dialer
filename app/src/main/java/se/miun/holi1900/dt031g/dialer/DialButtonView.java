@@ -143,6 +143,6 @@ public class DialButtonView extends ConstraintLayout implements View.OnClickList
         // Get the an instance of the singleton class SoundPlayer
         // the reference to this instance should not be stored in this class
         // Call soundPlayer class method to play sound and pass the reference of this dial button
-        SoundPlayer.getInstance(getContext()).playSound(this);
+        SoundPlayer.getInstance().playSound(this);
     }
 }

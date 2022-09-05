@@ -161,6 +161,7 @@ public class Util {
 	 */
 	public static boolean unzip(File sourceFile, File destinationDir) {
 		try {
+            Log.d(TAG, "unzip: source file = " + sourceFile + " destination file = " + destinationDir);
 			// Open the source ZIP file for reading
 			ZipFile zipFile = new ZipFile(sourceFile);
 

@@ -2,7 +2,9 @@ package se.miun.holi1900.dt031g.dialer;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -12,6 +14,7 @@ import java.sql.Array;
 import java.util.ArrayList;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private static final String TAG = "SettingsFragment";
     private final static String pref_store_numbers = "store_number_key";
     private final static String pref_delete_numbers = "delete_number_key";
     private ListPreference voicesPref;
@@ -30,12 +33,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if(voicesPref != null){
             updateVoicesPreference();
         }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
+        //getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     /**
@@ -44,7 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
+        //getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
         updateVoicesPreference();
 
     }
@@ -72,8 +76,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
      * sets values of listPreference shown
      */
     private void updateVoicesPreference(){
+        Log.i(TAG, "updateVoicesPreference: called ");
         String[] voices = getVoicesNames();
         if(voices != null){
+            Log.i(TAG, "updateVoicesPreference: Voices is not null");
             voicesPref.setEntries(voices);
             voicesPref.setEntryValues(voices);
         }

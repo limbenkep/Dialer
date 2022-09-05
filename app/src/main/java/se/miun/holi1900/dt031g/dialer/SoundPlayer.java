@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SoundPlayer {
+    private static final String TAG = "SoundPlayer";
 
     //Amap that holds pairs for all the button label and their corresponding sound id  from SoundPool
     private final Map<String, Integer> soundIds;
@@ -17,7 +18,7 @@ public class SoundPlayer {
 
     private SoundPool soundPool;
 
-    private SoundPlayer(Context context){
+    private SoundPlayer(){
         /*
          * From API level 21 the way to create a new SoundPool changed. Instead of using the
          * the constructor, we should now use SoundPool.Builder for level 21+. */
@@ -33,7 +34,19 @@ public class SoundPlayer {
 
         //initialize soundIds
         soundIds = new HashMap<>();
+    }
 
+    // Static method to create instance of Singleton class
+    public static SoundPlayer getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new SoundPlayer();
+
+        return single_instance;
+    }
+
+
+    public void initializeSoundPool(Context context) {
         // Load the sounds ids for the sounds in the Default voice directory in internal storage
         // to the map replacing existing sound id if present sound ids correspond to title of
         // the dial buttons in the dialpad. The is a sound for each possible title
@@ -42,19 +55,12 @@ public class SoundPlayer {
             String value = entry.getValue();
             String prefKey = context.getString(R.string.voices_key);
             String fileName = Util.getPreferenceSummary(prefKey, Util.DEFAULT_VOICE, context);
+            //Log.d(TAG, "SoundPlayer: Current file to extract songs "+ fileName);
             String path = Util.getVoiceFilePath(Util.getDirForVoice(context, fileName), value);
             soundIds.put(key, soundPool.load(path, 1));
         }
     }
 
-    // Static method to create instance of Singleton class
-    public static SoundPlayer getInstance(Context context)
-    {
-        if (single_instance == null)
-            single_instance = new SoundPlayer(context);
-
-        return single_instance;
-    }
 
     /**
      * Plays a sound in the soundPool whose id is the same as the title of the DialButtonView requesting sound
@@ -64,10 +70,12 @@ public class SoundPlayer {
 
         try {
             String title = dialButton.getTitle();
+
             soundPool.play(soundIds.get(title), 1f, 1f, 1, 0, 1f);
+
         }
-        catch(Exception e) {
-            System.out.println("No sound for assigned to this button");
+        catch(Exception e) {e.printStackTrace();
+            Log.e(TAG, "playSound: No sound for assigned to this button", e);
 
         }
     }

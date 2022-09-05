@@ -28,7 +28,7 @@ public class DialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dial);
-        SoundPlayer.getInstance(getApplicationContext());
+        SoundPlayer.getInstance().initializeSoundPool(this);
 
 
         if (ContextCompat.checkSelfPermission(DialActivity.this,
@@ -73,6 +73,18 @@ public class DialActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SoundPlayer.getInstance().destroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SoundPlayer.getInstance().initializeSoundPool(this);
+    }
+
     void requestCallPermission(){
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
             new AlertDialog.Builder(this)
@@ -97,17 +109,9 @@ public class DialActivity extends AppCompatActivity {
             new androidx.appcompat.app.AlertDialog.Builder(this)
                     .setTitle("Location Permission Needed")
                     .setMessage("This app needs the Location permission, please accept to use location functionality")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            sendLocationRequest();
-                        }
-                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
-                            Toast.makeText(DialActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-                        }
+                    .setPositiveButton("OK", (dialog, which) -> sendLocationRequest()).setNegativeButton("CANCEL", (dialog, which) -> {
+                        dialog.dismiss();
+                        Toast.makeText(DialActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
                     }).create().show();
         } else {
             sendLocationRequest();
@@ -122,6 +126,7 @@ public class DialActivity extends AppCompatActivity {
                 .requestPermissions(DialActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         LOCATION_ACCESS_CODE);
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

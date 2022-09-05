@@ -40,7 +40,7 @@ public class DownloadActivity extends AppCompatActivity {
     private static final String DOWNLOADED_VOICES = "downloadedVoices.zip";
     private BroadcastReceiver receiver;
     private ConstraintLayout progressdialog;
-    private DownloadVoicesAsyncTask download;
+    //private DownloadVoicesAsyncTask download;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,73 +77,67 @@ public class DownloadActivity extends AppCompatActivity {
      */
     private void getVoicesFromUrl(){
         //handle downloading
-        voicesWebView.setDownloadListener(new DownloadListener()
-        {
-            @Override
-            public void onDownloadStart(String url, String userAgent,
-                                        String contentDisposition, String mimeType,
-                                        long contentLength) {
-                ProgressDialog dialog =
-                        ProgressDialog.show(DownloadActivity.this, "", "downloading voices...",true);
+        voicesWebView.setDownloadListener((url, userAgent, contentDisposition, mimeType, contentLength) -> {
+            ProgressDialog dialog =
+                    ProgressDialog.show(DownloadActivity.this, "", "downloading voices...",true);
 
-                new  Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String state = Environment.getExternalStorageState();
-                        boolean spaceFound =  Environment.MEDIA_MOUNTED.equals(state);
-                        if(spaceFound){
-                            DownloadManager.Request request = new DownloadManager.Request(
-                                    Uri.parse(url));
-                            request.setMimeType(getMimeType(url));
-                            String cookies = CookieManager.getInstance().getCookie(url);
-                            request.addRequestHeader("cookie", cookies);
-                            request.addRequestHeader("User-Agent", userAgent);
-                            request.setDescription("Downloading File...");
-                            request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
-                            request.allowScanningByMediaScanner();
-                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                            request.setDestinationInExternalPublicDir(
-                                    Environment.DIRECTORY_DOWNLOADS, DOWNLOADED_VOICES);
-                            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                            dm.enqueue(request);
-                        }
-                        else{
-
-                            Toast.makeText(getApplicationContext(), "There is not enough space available to download file.",
-                                    Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-
-                        //register receiver to notify when download is completed
-                        receiver = new BroadcastReceiver() {
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                String action = intent.getAction();
-                                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                                    dialog.dismiss();
-
-                                    Toast.makeText(context, "Download completed", Toast.LENGTH_SHORT).show();
-                                    File sourceFile = new File(
-                                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                                            getText(R.string.downloaded_voices_file).toString());
-                                    File destinationFile = new File(getApplicationContext().getFilesDir(), getText(R.string.voices_directory).toString());
-                                    String text;
-                                    if(!Util.unzip(sourceFile, destinationFile)){
-                                        text = "Copying voices to internal storage was unsuccessful";
-                                    }else {
-                                        text = "Download completed and voices stored.";
-                                    }
-                                    deleteFile();
-                                    dialog.dismiss();
-                                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        };
-                        registerReceiver(receiver,
-                                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            new  Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    String state = Environment.getExternalStorageState();
+                    boolean spaceFound =  Environment.MEDIA_MOUNTED.equals(state);
+                    if(spaceFound){
+                        DownloadManager.Request request = new DownloadManager.Request(
+                                Uri.parse(url));
+                        request.setMimeType(getMimeType(url));
+                        String cookies = CookieManager.getInstance().getCookie(url);
+                        request.addRequestHeader("cookie", cookies);
+                        request.addRequestHeader("User-Agent", userAgent);
+                        request.setDescription("Downloading File...");
+                        request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+                        request.allowScanningByMediaScanner();
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        request.setDestinationInExternalPublicDir(
+                                Environment.DIRECTORY_DOWNLOADS, DOWNLOADED_VOICES);
+                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        dm.enqueue(request);
                     }
-                });
-            }
+                    else{
+
+                        Toast.makeText(getApplicationContext(), "There is not enough space available to download file.",
+                                Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+
+                    //register receiver to notify when download is completed
+                    receiver = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            String action = intent.getAction();
+                            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                                dialog.dismiss();
+
+                                Toast.makeText(context, "Download completed", Toast.LENGTH_SHORT).show();
+                                File sourceFile = new File(
+                                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                                        DOWNLOADED_VOICES);
+                                File destinationFile = new File(getApplicationContext().getFilesDir(), getText(R.string.voices_directory).toString());
+                                String text;
+                                if(!Util.unzip(sourceFile, destinationFile)){
+                                    text = "Copying voices to internal storage was unsuccessful";
+                                }else {
+                                    text = "Download completed and voices stored.";
+                                }
+                                deleteFile();
+                                dialog.dismiss();
+                                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    };
+                    registerReceiver(receiver,
+                            new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                }
+            });
         });
     }
 
@@ -227,88 +221,6 @@ public class DownloadActivity extends AppCompatActivity {
         progressdialog.setVisibility(View.GONE);
     }
 
-    /**
-     * This class implements the methods to execute the async task to download weather information from a URL
-     * The class gets the URL as input, displays a progress dialog on screen will the weather information
-     * is downloaded in the background. When the download is done, the information if displayed on dialog Fragment
-     */
-    private class DownloadVoicesAsyncTask extends AsyncTask<URL, Integer, Void> {
-        private static final String TAG = "DownloadZipFileAsyncTas";
-
-        /**
-         * display progress dialog
-         */
-        @Override
-        protected void onPreExecute() {
-            enableProgressBar();
-        }
-
-        /**
-         * creates an HttpsURLConnection and read the data from the passed url and writes the data
-         * as a file in download directory
-         * @param urls url from which zip file will be read.
-         */
-        @Override
-        protected Void doInBackground(URL... urls) {
-
-            URL url = urls[urls.length - 1];
-            HttpsURLConnection connection;
-            try {
-                // get a connection from url
-                connection = (HttpsURLConnection) url.openConnection();
-                int fileSize = connection.getContentLength();
-                BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
-                File file = new File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        DOWNLOADED_VOICES);
-                FileOutputStream fos = new FileOutputStream(file);
-                BufferedOutputStream out = new BufferedOutputStream(fos, 1024);
-                byte[] buffer = new byte[1024];
-                int read;
-                double downloaded = 0.00;
-                double percentDownloaded = 0.00;
-                int bytesRead, totalBytesRead = 0;
-                while(!isCancelled() && (read = in.read(buffer, 0, 1024)) >=0){
-                    out.write(buffer, 0, read);
-                    downloaded += read;
-                    percentDownloaded = (downloaded*100)/fileSize;
-                    publishProgress(totalBytesRead);
-                }
-
-                if(isCancelled()){
-                    deleteFile();
-                }
-                out.close();
-                in.close();
-                connection.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        /**
-         * unzip file and to the app specific storage
-         *hide progress bar
-         */
-        @Override
-        protected void onPostExecute(Void unused) {
-
-            File sourceFile = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    DOWNLOADED_VOICES);
-            File destinationFile = new File(getApplicationContext().getFilesDir(), getText(R.string.voices_directory).toString());
-            String text;
-            if(!Util.unzip(sourceFile, destinationFile)){
-                text = "Copying voices to internal storage was unsuccessful";
-            }else {
-                text = "Download completed and voices stored.";
-            }
-            deleteFile();
-            disableProgressBar();
-            Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
 }
