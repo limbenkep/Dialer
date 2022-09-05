@@ -72,4 +72,5 @@
     <string name="call_date">Call date</string>
     <string name="call_location_varable_string">[%1$f, %2$f]</string>
     <string name="empty_call_list_message">The call list is empty.</string>
+    <string name="default_voice" translatable="false">mamacita_us</string>
 </resources>

@@ -30,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+
     public static boolean shouldStoreNumbers(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.
                 getDefaultSharedPreferences(context);

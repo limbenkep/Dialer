@@ -11,5 +11,6 @@
         app:key="@string/voices_key"
         app:title="@string/voices"
         app:summary="%s"
+        app:defaultValue="@string/default_voice"
         app:useSimpleSummaryProvider="true"/>
 </PreferenceScreen>
